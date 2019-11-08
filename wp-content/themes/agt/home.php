@@ -2,12 +2,12 @@
 
 get_header();?>
 
-
+<!--
 <div id="carouselExampleCaptions" class="carousel slide" data-ride="carousel">
 
     <div class="carousel-inner">
         <div class="carousel-item active">
-            <!--<img src="<?php echo get_template_directory_uri(); ?>/img/img1.jpg"  alt="...">-->
+            <img src="<?php echo get_template_directory_uri(); ?>/img/img1.jpg"  alt="...">
             <video  autoplay muted loop class="img-fluid">  
                 <source src="<?php echo get_template_directory_uri(); ?>/img/bg.mp4" >
             </video>
@@ -39,7 +39,7 @@ get_header();?>
         <span class="carousel-control-next-icon" aria-hidden="true"></span>
         <span class="sr-only">Next</span>
     </a>
-</div>
+</div>-->
 
 
 <script>

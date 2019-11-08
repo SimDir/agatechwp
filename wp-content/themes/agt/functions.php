@@ -1,5 +1,9 @@
 <?php
 
+add_theme_support('menus');
+register_nav_menus(array(
+    'top' => 'Верхнее меню', //Название месторасположения меню в шаблоне
+));
 
 /**
  * Register widget area.

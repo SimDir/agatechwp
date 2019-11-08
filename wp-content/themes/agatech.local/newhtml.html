@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        <div class="entry-content">
+            <div class="addthis_toolbox addthis_default_style " addthis:url="http://bot.kz/2015/10/44089" addthis:title="Настройка Структуры древовидных данных в WordPress с The Walker класса "><a class="addthis_button_facebook_like at300b" fb:like:layout="button_count"><div class="fb-like fb_iframe_widget" data-layout="button_count" data-show_faces="false" data-share="false" data-action="like" data-width="90" data-height="25" data-font="arial" data-href="http://bot.kz/2015/10/44089" data-send="false" style="height: 25px;" fb-xfbml-state="rendered" fb-iframe-plugin-query="action=like&amp;app_id=172525162793917&amp;container_width=0&amp;font=arial&amp;height=25&amp;href=http%3A%2F%2Fbot.kz%2F2015%2F10%2F44089&amp;layout=button_count&amp;locale=en_US&amp;sdk=joey&amp;send=false&amp;share=false&amp;show_faces=false&amp;width=90"><span style="vertical-align: bottom; width: 70px; height: 20px;"><iframe name="f3ef06af71cf0b" width="90px" height="25px" title="fb:like Facebook Social Plugin" frameborder="0" allowtransparency="true" allowfullscreen="true" scrolling="no" allow="encrypted-media" src="https://www.facebook.com/v2.6/plugins/like.php?action=like&amp;app_id=172525162793917&amp;channel=https%3A%2F%2Fstaticxx.facebook.com%2Fconnect%2Fxd_arbiter.php%3Fversion%3D44%23cb%3Df1165443bd6d8ec%26domain%3Dbot.kz%26origin%3Dhttp%253A%252F%252Fbot.kz%252Ff1316641edbb964%26relation%3Dparent.parent&amp;container_width=0&amp;font=arial&amp;height=25&amp;href=http%3A%2F%2Fbot.kz%2F2015%2F10%2F44089&amp;layout=button_count&amp;locale=en_US&amp;sdk=joey&amp;send=false&amp;share=false&amp;show_faces=false&amp;width=90" style="border: none; visibility: visible; width: 70px; height: 20px;" class=""></iframe></span></div></a><a class="addthis_button_tweet at300b"><div class="tweet_iframe_widget" style="width: 62px; height: 25px;"><span><iframe id="twitter-widget-0" scrolling="no" frameborder="0" allowtransparency="true" class="twitter-share-button twitter-share-button-rendered twitter-tweet-button" style="position: static; visibility: visible; width: 80px; height: 20px;" title="Twitter Tweet Button" src="https://platform.twitter.com/widgets/tweet_button.2d991e3dfc9abb2549972ce8b64c5d85.ru.html#dnt=false&amp;id=twitter-widget-0&amp;lang=ru&amp;original_referer=http%3A%2F%2Fbot.kz%2F2015%2F10%2F44089%3Fh%3D5c34dee96f37b55e65b2256159ab47b1&amp;size=m&amp;text=%D0%9D%D0%B0%D1%81%D1%82%D1%80%D0%BE%D0%B9%D0%BA%D0%B0%20%D0%A1%D1%82%D1%80%D1%83%D0%BA%D1%82%D1%83%D1%80%D1%8B%20%D0%B4%D1%80%D0%B5%D0%B2%D0%BE%D0%B2%D0%B8%D0%B4%D0%BD%D1%8B%D1%85%20%D0%B4%D0%B0%D0%BD%D0%BD%D1%8B%D1%85%20%D0%B2%20WordPress%20%D1%81%20The%20Walker%20%D0%BA%D0%BB%D0%B0%D1%81%D1%81%D0%B0%20&amp;time=1573213329746&amp;type=share&amp;url=http%3A%2F%2Fbot.kz%2F2015%2F10%2F44089" data-url="http://bot.kz/2015/10/44089"></iframe></span></div></a><a class="addthis_button_google_plusone" g:plusone:size="medium"></a><a class="addthis_counter addthis_pill_style" href="#" style="display: inline-block;"><a class="atc_s addthis_button_compact">Поделиться<span></span></a><a class="addthis_button_expanded" target="_blank" title="Еще..." href="#"></a></a><div class="atclear"></div></div><p>В WordPress, А <strong>навигации menu</strong>, Список категорий или страниц, а также список комментариев всех их объединяет одна общая черта: они являются <strong>Визуальное представление древовидных structures</strong>,Это означает, что отношения superordination и подчинения существует среди элементов каждого дерева данных .</p>
+            <p>Там будет элементы, которые родители других элементов и, наоборот, элементы, которые являются потомками других элементов.Ответ на комментарий зависит логически от своего родителя, таким же образом, что элемент подменю зависит логически от корневого элемента дерева (или поддерева) .</p>
+            <p><span id="more-44089"></span></p>
+            <p>Начиная с версии 2.1, WordPress предоставляет <a href="https://core.trac.wordpress.org/browser/trunk/src/wp-includes/class-wp-walker.php"><code>Walker</code>абстрактный class</a><sup id="note-1"><a href="http://www.smashingmagazine.com/#1">1</a></sup>С конкретной функцией обхода этих древовидные структуры данных.Но это абстрактный класс не производит никакой продукции сам по себе.Он должен быть продлен с конкретного класса ребенок, который строит HTML кирпичи для конкретных списков элементов.С этой точной функции, WordPress предоставляет <code>Walker_Category</code>класс для получения вложенный список категорий, то <a href="https://codex.wordpress.org/Class_Reference/Walker_Page"><code>Walker_Page</code>class</a><sup id="note-2"><a href="http://www.smashingmagazine.com/#2">2</a></sup>, Которая строит список страниц, и ряд других <code>Walker</code>конкретные дочерние классы .</p>
+            <p>Но когда мы строим WordPress тему, мы, возможно, потребуется настроить структуру по умолчанию HTML-список, чтобы соответствовать нашим потребностям.Мы можете добавить описание пункта меню, добавить пользовательские имена класса или, возможно, пересмотреть структуру HTML список категорий или замечания .</p>
+            <p>Прежде чем мы начнем, давайте посмотрим на наиболее важной концепции в этой статье .</p>
+            <h3 id="tree-like-data-structures">Древовидных структур данных <a href="http://www.smashingmagazine.com/#tree-like-data-structures" aria-label="Link to section 'Tree-Like Data Structures'">Link</a></h3>
+            <p><a href="https://en.wikipedia.org/wiki/Tree_(data_structure)">Википедия определяет tree</a><sup id="note-3"><a href="http://www.smashingmagazine.com/#3">3</a></sup>как иерархической организации данных: </p>
+            <p>“Структура данных дерево может быть определена рекурсивно (локально) в коллекции узлов (начиная с корневого узла), где каждый узел представляет собой структуру данных, состоящую из стоимости, вместе со списком ссылок на узлы (в ‘детей’), с ограничениями, которые нет ссылок дублируются, и никто не укажет на корню “</p>
+            <p>Таким образом, структура характеризуется корневой элемент (на первом уровне), родительские элементы (которые непосредственно ссылаются на subordered элементы, названные дети), братья, сестры (которые являются элементами, размещенные на том же иерархическом уровне) и потомок и предок элементы (которые соединены более чем одной родитель-ребенок отношение) .</p>
+            <figure><a href="/wp-content/uploads/2015/10/44089-01-wpcommentsstructure-opt.png"><img src="/wp-content/uploads/2015/10/44089-01-wpcommentsstructure-opt-small.png" alt="The wp_comments table structure"></a><sup id="note-4"><a href="http://www.smashingmagazine.com/#4">4</a></sup><br>
+                <figcaption>Каждый элемент в <code>wp_comments</code>ссылается на своего родителя по значению <code>comment_parent</code>поле.(<a href="/wp-content/uploads/2015/10/44089-01-wpcommentsstructure-opt.png"> Просмотр большой version</a> <sup id="note-5"> <a href="http://www.smashingmagazine.com/#5"> 5</a> </sup>) </figcaption>
+            </figure>
+            <p>В качестве примера такого рода структуры, let’с принять <code>wp_comments</code>Таблица из базы данных WordPress.Оператор <code>comment_parent</code>поле хранит родительскую идентификатор каждого элемента в структуре, что позволяет создать ссылку из дочернего узла его родителя .</p>
+            <h3 id="what-well-be-doing">Что мы будем делать <a href="http://www.smashingmagazine.com/#what-well-be-doing" aria-label="Link to section 'What We’ll Be Doing'">Link</a></h3>
+            <p>Прежде чем двигаться вперед, I’покажу вам простой пример конкретного класса детской производить HTML разметку список категории .</p>
+            <p>Список категорий в WordPress является распечатана <code>wp_list_categories</code>Тег шаблона.Когда мы называем эту функцию, выполняет <code>Walker_Category</code>класс, который на самом деле строит HTML структуру, создавая что-то вроде следующего кода: </p>
+            <pre><code>&lt;li class="categories"&gt;Categories
+   &lt;ul&gt;  
+      &lt;li class="cat-item cat-item-10"&gt;
+         &lt;a href="http://example.com/wordpress/category/coding/"&gt;Coding&lt;/a&gt;
+         &lt;ul class="children"&gt;
+            &lt;li class="cat-item cat-item-39"&gt;
+               &lt;a href="http://example.com/wordpress/category/coding/php/"&gt;PHP&lt;/a&gt;
+            &lt;/li&gt;
+         &lt;/ul&gt;
+      &lt;/li&gt;
+      &lt;li class="cat-item cat-item-11"&gt;
+         &lt;a href="http://example.com/wordpress/category/design/"&gt;Design&lt;/a&gt;
+      &lt;/li&gt;
+   &lt;/ul&gt;
+&lt;/li&gt;
+</code></pre>
+            <p><code>wp_list_categories</code>будет печатать продукта, произведенного с <code>Walker_Category</code>Класс бетона.Это будет элемент списка обертка держит вложенный список категорий .</p>
+            <p>Теперь предположим, что вы don’т, как такого рода список, и вы хотите, чтобы напечатать пользовательские HTML-код.Вы можете сделать этот трюк, определяя свой собственный <code>Walker</code>продление.В вашей темы <code>functions.php</code>Файл, добавьте следующий код: </p>
+            <pre><code>class My_Custom_Walker extends Walker
+{
+   public $tree_type = 'category';
+
+   public $db_fields = array ('parent' =&gt; 'parent', 'id' =&gt; 'term_id');
+
+   public function start_lvl( &amp;$output, $depth = 0, $args = array() ) {
+      $output .= "&lt;ul class='children'&gt;\n";
+   }
+
+   public function end_lvl( &amp;$output, $depth = 0, $args = array() ) {
+      $output .= "&lt;/ul&gt;\n";
+   }
+
+   public function start_el( &amp;$output, $category, $depth = 0, $args = array(), $current_object_id = 0 ) {
+      $output .= "&lt;li&gt;" . $category-&gt;name . "\n";
+   }
+
+   public function end_el( &amp;$output, $category, $depth = 0, $args = array() ) {
+      $output .= "&lt;/li&gt;\n";
+   }
+}
+</code></pre>
+            <p>Даже если вы не знаете много о <a href="http://php.net/manual/en/language.oop5.basic.php">PHP classes</a><sup id="note-6"><a href="http://www.smashingmagazine.com/#6">6</a></sup>Код вполне описательный характер.Оператор <code>start_lvl()</code>Метод печатает <code>start</code>тег для каждого уровня дерева (обычно <code>&lt;ul&gt;</code> тегов), в то время как <code>end_lvl()</code>печатает в конце каждого уровня.В то же образом, <code>start_el</code>и <code>end_el</code>Методы открывать и закрывать каждый элемент в списке .</p>
+            <p>Это просто простой пример, и мы won’т погружение вглубь <code>Walker</code>свойства и методы в настоящее время.I’буду только сказать, что конкретный класс детского <code>My_Custom_Walker</code>расширяет абстрактный класс <code>Walker</code>, Переосмысление некоторых из своих свойств и методов .</p>
+            <p>Как я уже писал выше, список категорий распечатана <code>wp_list_categories</code>Тег шаблона, но HTML-структура строится по <code>Walker_Category</code>класс.WordPress позволяет перейти обычай <code>walker</code>класс на <code>template</code>тег.Новый <code>walker</code>будет создавать пользовательские HTML структуру, которая будет распечатана на экране <code>wp_list_categories</code>.</p>
+            <p>В качестве первого примера, let’создадим короткий код, который будет печатать новый разметку для списков категорий.В вашем <code>functions.php</code>Файл, добавьте следующий код: </p>
+            <pre><code>function my_init() {
+   add_shortcode( 'list', 'my_list' );
+}
+add_action('init', 'my_init');
+
+function my_list( $atts ){
+   $list = wp_list_categories( array( 'echo' =&gt; 0, 'walker' =&gt; new My_Custom_Walker() ) );
+   return $list;
+}
+</code></pre>
+            <p>Мы передаем в функцию массив двух аргументов: <code>echo</code>держит результат в переменной, а <code>walker</code>устанавливает обычай <code>Walker</code>(или <code>Walker_Category</code>) ребенок класс .</p>
+            <p>Наконец, шорткод <code>[list]</code>будет печатать полученный HTML код: </p>
+            <pre><code>&lt;ul&gt;
+   &lt;li class="categories"&gt;Categories
+      &lt;ul&gt;
+         &lt;li&gt;Coding
+            &lt;ul class="children"&gt;
+            &lt;li&gt;PHP&lt;/li&gt;
+            &lt;/ul&gt;
+         &lt;/li&gt;
+         &lt;li&gt;Design&lt;/li&gt;
+      &lt;/ul&gt;
+   &lt;/li&gt;
+&lt;/ul&gt;
+</code></pre>
+            <p>Как вы можете видеть, пример очень простой, но должно дать вам представление о нашей цели .</p>
+            <h3>Оператор <code>Walker</code>Класса и его Extensions</h3>
+            <p><a href="https://codex.wordpress.org/Class_Reference/Walker"><code>Walker</code>class</a><sup id="note-7"><a href="http://www.smashingmagazine.com/#7">7</a></sup>определяется в <a href="https://core.trac.wordpress.org/browser/trunk/src/wp-includes/class-wp-walker.php"><code>wp-includes/class-wp-walker.php</code></a><sup id="note-19"><a href="http://www.smashingmagazine.com/#19">19</a></sup><sup id="note-8"><a href="http://www.smashingmagazine.com/#8">8</a></sup>как «класс для отображения различных древовидные структуры.” </p>
+            <p>Как я уже говорил раньше, it’S <a href="http://php.net/manual/en/language.oop5.abstract.php">абстрактный class</a><sup id="note-9"><a href="http://www.smashingmagazine.com/#9">9</a></sup>и не производят никакого вывода по себе;скорее, он должен быть продлен путем определения одного или нескольких конкретных дочерних классов.Только эти конкретные классы ребенок будет производить HTML разметку.WordPress предоставляет несколько расширений <code>Walker</code>класс, каждый производстве иерархическую структуру HTML .</p>
+            <p>Посмотрите на таблице ниже: </p>
+            <table>
+                <tbody>
+                    <tr>
+                        <th>Класс name</th>
+                        <th>Определено in</th>
+                        <th>Extends</th>
+                    </tr>
+                    <tr>
+                        <td><code>Walker_Page</code></td>
+                        <td><a href="https://core.trac.wordpress.org/browser/trunk/src/wp-includes/post-template.php#L1325">после template.php</a><sup id="note-10"><a href="http://www.smashingmagazine.com/#10">10</a></sup></td>
+                        <td><code>Walker</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>Walker_PageDropdown</code></td>
+                        <td><a href="https://core.trac.wordpress.org/browser/trunk/src/wp-includes/post-template.php#L1471">после template.php</a><sup id="note-11"><a href="http://www.smashingmagazine.com/#11">11</a></sup></td>
+                        <td><code>Walker</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>Walker_Category</code></td>
+                        <td><a href="https://core.trac.wordpress.org/browser/trunk/src/wp-includes/category-template.php#L962">категория-template.php</a><sup id="note-12"><a href="http://www.smashingmagazine.com/#12">12</a></sup></td>
+                        <td><code>Walker</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>Walker_CategoryDropdown</code></td>
+                        <td><a href="https://core.trac.wordpress.org/browser/trunk/src/wp-includes/category-template.php#L1163">категория-template.php</a><sup id="note-13"><a href="http://www.smashingmagazine.com/#13">13</a></sup></td>
+                        <td><code>Walker</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>Walker_Category_Checklist</code></td>
+                        <td><a href="https://core.trac.wordpress.org/browser/tags/4.2.2/src/wp-admin/includes/template.php#L24">template.php</a><sup id="note-14"><a href="http://www.smashingmagazine.com/#14">14</a></sup></td>
+                        <td><code>Walker</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>Walker_Comment</code></td>
+                        <td><a href="http://www.smashingmagazine.com//core.trac.wordpress.org/browser/tags/4.2.2/src/wp-includes/comment-template.php#L1662">комментарии-template.php</a><sup id="note-15"><a href="http://www.smashingmagazine.com/#15">15</a></sup></td>
+                        <td><code>Walker</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>Walker_Nav_Menu</code></td>
+                        <td><a href="https://core.trac.wordpress.org/browser/trunk/src/wp-includes/nav-menu-template.php#L16">NAV-меню template.php</a><sup id="note-16"><a href="http://www.smashingmagazine.com/#16">16</a></sup></td>
+                        <td><code>Walker</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>Walker_Nav_Menu_Checklist</code></td>
+                        <td><a href="https://core.trac.wordpress.org/browser/tags/4.2.2/src/wp-admin/includes/nav-menu.php#L237">NAV-menu.php</a><sup id="note-17"><a href="http://www.smashingmagazine.com/#17">17</a></sup></td>
+                        <td><code>Walker_Nav_Menu</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>Walker_Nav_Menu_Edit</code></td>
+                        <td><a href="https://core.trac.wordpress.org/browser/tags/4.2.2/src/wp-admin/includes/nav-menu.php#L10">NAV-menu.php</a><sup id="note-18"><a href="http://www.smashingmagazine.com/#18">18</a></sup></td>
+                        <td><code>Walker_Nav_Menu</code></td>
+                    </tr>
+                </tbody>
+            </table>
+            <p>Эта таблица показывает встроенный <code>Walker</code>дочерние классы, файлы шаблонов они определены в, и соответствующего родительского класса .</p>
+            <p>Цель этой статьи заключается в поставить <code>Walker</code>класс для работы, так что мы должны погрузиться в его структуре .</p>
+            <h3>Оператор <code>Walker</code>Structure__56 класса «|
+                <p><code>Walker</code>определяется в <a href="https://core.trac.wordpress.org/browser/trunk/src/wp-includes/class-wp-walker.php"><code>wp-includes/class-wp-walker.php</code></a><sup id="note-19"><a href="http://www.smashingmagazine.com/#19">19</a></sup><sup id="note-8"><a href="http://www.smashingmagazine.com/#8">8</a></sup>,Это заявляет, четыре и шесть свойства основных методов, большинство из которых пусты и должны быть пересмотрены в конкретного ребенка классы .</p>
+                <p>Свойства являются: </p>
+                <ul>
+                    <li><code>$tree_type</code></li>
+                    <li><code>$db_fields</code></li>
+                    <li><code>$max_pages</code></li>
+                    <li><code>$has_children</code></li>
+                </ul>
+            </h3><h4><code>$tree_type</code></h4>
+            <p>Это строка или массив данных, обрабатываемых <code>Walker</code>класс и его расширений .</p>
+            <pre><code>public $tree_type;</code></pre>
+            <p>Оператор <code>Walker</code>класс объявляет свойство, но не задать его значение.Чтобы использовать, он должен быть повторно объявлен в конкретный класс детей.Например, <code>Walker_Page</code>класс объявляет следующее <code>$tree_type</code>недвижимость: </p>
+            <pre><code>public $tree_type = 'page';</code></pre>
+            <p>В то время как <code>Walker_Nav_menu</code>заявляет следующее <code>$tree_type</code>: </p>
+            <pre><code>public $tree_type = array( 'post_type', 'taxonomy', 'custom' );</code></pre>
+            <h4><code>$db_fields</code></h4>
+            <p>Так же, как $ <code>tree_type</code><code>$db_fields</code>объявлен без присвоенного значения.В <code>Walker</code>“Документация класс, он просто говорит, что его значение является массивом: </p>
+            <pre><code>public $db_fields;</code></pre>
+            <p>Элементы массива должны установить поля базы данных обеспечивая ID и родительский ID для каждого элемента пройденных данных набор .</p>
+            <p>Оператор <code>Walker_Nav_Menu</code>класса redeclares <code>$db_fields</code>следующим образом: </p>
+            <pre><code>public $db_fields = array( 'parent' =&gt; 'menu_item_parent', 'id' =&gt; 'db_id' );</code></pre>
+            <p><code>$db_fields['parent']</code>и <code>$db_fields['id']</code>будет использоваться <code>display_element</code>Метод .</p>
+            <h4><code>$max_pages</code></h4>
+            <p>Это держит в памяти максимальное количество страниц, пройденный <code>paged_walker</code>способ.Ее начальное значение установлено в <code>1</code>.</p>
+            <pre><code>public $max_pages = 1;</code></pre>
+            <h4><code>$has_children</code></h4>
+            <p>Это логическое установлен в <code>true</code>если текущий элемент имеет детей .</p>
+            <pre><code>public $has_children;</code></pre>
+            <p>После свойства, методы являются: </p>
+            <ul>
+                <li><code>start_lvl</code></li>
+                <li><code>end_lvl</code></li>
+                <li><code>start_el</code></li>
+                <li><code>end_el</code></li>
+                <li><code>display_element</code></li>
+                <li><code>walk</code></li>
+            </ul>
+            <h4><code>start_lvl</code></h4>
+            <p>Этот метод выполняется, когда <code>Walker</code>класс достигает корневой уровень нового поддерева.Как правило, это контейнер для поддеревьев элементов .</p>
+            <pre><code>public function start_lvl( &amp;$output, $depth = 0, $args = array() ) {}</code></pre>
+            <p><code>start_lvl()</code>принимает три аргумента: </p>
+            <table>
+                <tbody>
+                    <tr>
+                        <th>Argument</th>
+                        <th>Type</th>
+                        <th>Description</th>
+                    </tr>
+                    <tr>
+                        <td><code>$output</code></td>
+                        <td>string</td>
+                        <td>передается по ссылке;используется для добавления дополнительного content</td>
+                    </tr>
+                    <tr>
+                        <td><code>$depth</code></td>
+                        <td>int</td>
+                        <td>глубина item</td>
+                    </tr>
+                    <tr>
+                        <td><code>$args</code></td>
+                        <td>array</td>
+                        <td>массив дополнительных arguments</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p>Потому что производит вывод HTML, <code>start_lvl</code>должны быть пересмотрены при продлении <code>Walker</code>класс.Например, <code>start_lvl</code>Метод <code>Walker_Nav_Menu</code>Класс выведет а <code>ul</code>Элемент и определяется следующим образом: </p>
+            <pre><code>public function start_lvl( &amp;$output, $depth = 0, $args = array() ) {
+   $indent = str_repeat("\t", $depth);
+   $output .= "\n$indent&lt;ul class=\"sub-menu\"&gt;\n";
+}
+</code></pre>
+            <h4><code>end_lvl</code></h4>
+            <p>Второй способ из <code>Walker</code>класс закрывает тег ранее открыл <code>start_lvl</code>.</p>
+            <pre><code>public function end_lvl( &amp;$output, $depth = 0, $args = array() ) {}</code></pre>
+            <p>Оператор <code>end_lvl</code>Метод <code>Walker_Nav_Menu</code>закрывает неупорядоченный список: </p>
+            <pre><code>public function end_lvl( &amp;$output, $depth = 0, $args = array() ) {
+   $indent = str_repeat("\t", $depth);
+   $output .= "$indent&lt;/ul&gt;\n";
+}
+</code></pre>
+            <h4><code>start_el</code></h4>
+            <p>Этот метод открывает тег, соответствующий каждому элементу дерева.Очевидно, что если <code>start_lvl</code>открывает <code>ul</code>элемент, то <code>start_el</code>должен открыть <code>li</code>элемент.Оператор <code>Walker</code>Класс определяет <code>start_el</code>следующим образом: </p>
+            <pre><code>public function start_el( &amp;$output, $object, $depth = 0, $args = array(), $id = 0 ) {}</code></pre>
+            <table>
+                <tbody>
+                    <tr>
+                        <th>Argument</th>
+                        <th>Type</th>
+                        <th>Description</th>
+                    </tr>
+                    <tr>
+                        <td><code>$output</code></td>
+                        <td>string</td>
+                        <td>передается по ссылке;используется для добавления дополнительного content</td>
+                    </tr>
+                    <tr>
+                        <td><code>$object</code></td>
+                        <td>object</td>
+                        <td>object</td>
+                    </tr>
+                    <tr>
+                        <td><code>$depth</code></td>
+                        <td>int</td>
+                        <td>глубина item</td>
+                    </tr>
+                    <tr>
+                        <td><code>$args</code></td>
+                        <td>array</td>
+                        <td>массив дополнительных arguments</td>
+                    </tr>
+                    <tr>
+                        <td><code>$id</code></td>
+                        <td>int</td>
+                        <td>текущий элемент ID</td>
+                    </tr>
+                </tbody>
+            </table>
+            <h4><code>end_el</code></h4>
+            <p>Это закрывает тег открыт на <code>start_el</code>.</p>
+            <pre><code>public function end_el( &amp;$output, $object, $depth = 0, $args = array() ) {}</code></pre>
+            <p>Наконец, we’ве достигли ядро ​​<code>Walker</code>класс.Следующие два метода используются для iterare над элементами массивов объектов, извлеченных из базы данных .</p>
+            <h4><code>display_element</code></h4>
+            <p>Я won’т показать полный код здесь, потому что вы можете найти его в <a href="https://core.trac.wordpress.org/browser/trunk/src/wp-includes/class-wp-walker.php#L112">WordPress Trac</a><sup id="note-20"><a href="http://www.smashingmagazine.com/#20">20</a></sup>,I’буду только сказать, что этот метод отображает элементы дерева .</p>
+            <pre><code>public function display_element( $element, &amp;$children_elements, $max_depth, $depth, $args, &amp;$output ) {}
+</code></pre>
+            <p><code>display_element</code>принимает следующие аргументы: </p>
+            <table>
+                <tbody>
+                    <tr>
+                        <th>Argument</th>
+                        <th>Type</th>
+                        <th>Description</th>
+                    </tr>
+                    <tr>
+                        <td><code>$element</code></td>
+                        <td>object</td>
+                        <td>object</td>
+                    </tr>
+                    <tr>
+                        <td><code>$children_elements</code></td>
+                        <td>array</td>
+                        <td>Список элементов, чтобы продолжить traversing</td>
+                    </tr>
+                    <tr>
+                        <td><code>$max_depth</code></td>
+                        <td>int</td>
+                        <td>Максимальная глубина traverse</td>
+                    </tr>
+                    <tr>
+                        <td><code>$depth</code></td>
+                        <td>int</td>
+                        <td>Глубина текущего element</td>
+                    </tr>
+                    <tr>
+                        <td><code>$args</code></td>
+                        <td>array</td>
+                        <td>массив arguments</td>
+                    </tr>
+                    <tr>
+                        <td><code>$output</code></td>
+                        <td>string</td>
+                        <td>передается по ссылке;используется для добавления дополнительного content</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p>Этот метод не выдает HTML самостоятельно.Разметка будетпостроен с помощью вызова каждого из ранее описанных методов: <code>start_lvl</code><code>end_lvl</code><code>start_el</code>и <code>end_el</code>.</p>
+            <h4><code>walk</code></h4>
+            <p><code>walk</code>является ядром из <code>Walker</code>класс.Это перебирает элементов дерева в зависимости от величины <code>$max_depth</code>Аргумент (см Trac для <a href="https://core.trac.wordpress.org/browser/trunk/src/wp-includes/class-wp-walker.php#L175"> все code</a> <sup id="note-21"> <a href="http://www.smashingmagazine.com/#21"> 21</a> </sup>) .</p>
+            <pre><code>public function walk( $elements, $max_depth ) {}</code></pre>
+            <p><code>walk</code>принимает два аргумента .</p>
+            <table>
+                <tbody>
+                    <tr>
+                        <th>Argument</th>
+                        <th>Type</th>
+                        <th>Description</th>
+                    </tr>
+                    <tr>
+                        <td><code>$elements</code></td>
+                        <td>array</td>
+                        <td>массив elements</td>
+                    </tr>
+                    <tr>
+                        <td><code>$max_depth</code></td>
+                        <td>int</td>
+                        <td>Максимальная глубина traverse</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p>Другие методы используются для более специфических pourposes .</p>
+            <h4><code>paged_walk</code></h4>
+            <p>Это создает страницу вложенных элементов.Метод устанавливает, какие элементы дерева данных должны принадлежать странице, а затем строит разметку путем вызова <code>display_element</code>и выводит результат .</p>
+            <pre><code>public function paged_walk( $elements, $max_depth, $page_num, $per_page ) {}</code></pre>
+            <h4><code>get_number_of_root_elements</code></h4>
+            <p>Это получает количество элементов первого уровня .</p>
+            <pre><code>public function get_number_of_root_elements( $elements ){}</code></pre>
+            <h4><code>unset_children</code></h4>
+            <p>Этот последний метод сбрасывает массив дочерних элементов для данного корневого элемента .</p>
+            <pre><code>public function unset_children( $e, &amp;$children_elements ){}</code></pre>
+            <p>Теперь, we’ве введен <code>Walker</code>свойства и методы, мы можем изучить один из его возможных применений: изменение HTML структуры меню навигации.Разметка по умолчанию для меню навигации производится самая <code>Walker_Nav_Menu</code>Класс бетона.По этой причине, we’создадим новый бетон <code>Walker</code>Дочерний класс на основе <code>Walker_Nav_Menu</code>И we’буду передать его <code>wp_nav_menu</code>заменить выход .</p>
+            <p>Но расширяет <code>Walker_Nav_Menu</code>класс всегда необходимо при восстановлении меню?! Конечно, нет </p>
+            <p>Большую часть времени, вызов на <code>wp_nav_menu</code>Тег шаблона хватит .</p>
+            <figure><img src="/wp-content/uploads/2015/10/44089-02-themelocation-opt.png" alt="Menus admin page"><br>
+                <figcaption>В странице редактирования “Меню”, установив местоположения тему для каждого пользовательского меню можно .</figcaption>
+            </figure>
+            <h3>Основные настройки навигационного меню: <code>wp_nav_menu</code>Шаблон Tag</h3>
+            <p>Навигационное меню могут быть включены в шаблоне файла темы с призывом к <code>wp_nav_menu()</code>Тег шаблона.Эта функция принимает только один аргумент, массив параметров, которые хорошо описанных <a href="https://codex.wordpress.org/Function_Reference/wp_nav_menu">в Codex</a><sup id="note-22"><a href="http://www.smashingmagazine.com/#22">22</a></sup>.</p>
+            <p><code>wp_nav_menu()</code>могут быть включены в шаблонах следующим образом: </p>
+            <pre><code>$defaults = array(
+   'theme_location'     =&gt; '',
+   'menu'            =&gt; '',
+   'container'       =&gt; 'div',
+   'container_class' =&gt; '',
+   'container_id'    =&gt; '',
+   'menu_class'         =&gt; 'menu',
+   'menu_id'         =&gt; '',
+   'echo'            =&gt; true,
+   'fallback_cb'     =&gt; 'wp_page_menu',
+   'before'          =&gt; '',
+   'after'           =&gt; '',
+   'link_before'     =&gt; '',
+   'link_after'         =&gt; '',
+   'items_wrap'         =&gt; '&lt;ul id="%1$s" class="%2$s"&gt;%3$s&lt;/ul&gt;',
+   'depth'           =&gt; 0,
+   'walker'          =&gt; ''
+);
+
+wp_nav_menu( $defaults );
+</code></pre>
+            <p>WordPress предоставляет множество параметров для настройки меню навигации.Мы можем изменить контейнер в меню, (он по умолчанию в <code>div</code>), в container’с Класс CSS и ID, а также текстовые строки и разметки должны быть включены до и после якоря элемента и до и после названия элемента.Кроме того, мы можем изменить структуру корневого элемента (<code>items_wrap</code>) и depht издерево .</p>
+            <p>Таким образом, мы don’т нужно продлить <code>Walker</code>(или <code>Walker_Nav_Menu</code>) класс каждый раз, когда мы хотим внести изменения в структуры __47 параметра меню |только тогда, когда мы должны производить более сложные структурные настройки.Это происходит, когда мы должны назначить CSS классы для элементов меню, когда конкретное условие происходит, или когда мы должны добавить данные или HTML код для пунктов меню .</p>
+            <p>Это может быть сделано путем установки значения для <code>walker</code>параметр, который не будет ничего, но экземпляр пользовательского класса бетона.Так, отныне, we’LL погружение глубже и глубже в WordPress меню, изменять структуру меню добавления пользовательских полей в меню items’редактирования коробки.Как я уже сказал, we’сделаю эту работу посредством расширения <code>Walker_Nav_Menu</code>, Так it’пора познакомиться с ним .</p>
+            <h3>Оператор <code>Walker_Nav_Menu</code>Class</h3>
+            <p>Оператор <code>Walker_Nav_Menu</code>класс определяется в <a href="https://core.trac.wordpress.org/browser/trunk/src/wp-includes/nav-menu-template.php"><code>wp-includes/nav-menu-template.php</code></a><sup id="note-23"><a href="http://www.smashingmagazine.com/#23">23</a></sup>,Это класс используется WordPress для создания структуры меню навигации в.Каждый раз, когда вы хотите, чтобы сделать соответствующие изменения в структуре меню, по умолчанию, вы можете продлить <code>Walker_Nav_Menu</code>.</p>
+            <p>Класс бетона redeclares <code>$tree_type</code>и <code>$db_fields</code>свойства и <code>start_lvl</code><code>end_lvl</code><code>start_el</code>и <code>end_el</code>методы .</p>
+            <pre><code>class Walker_Nav_Menu extends Walker {
+
+   public $tree_type = array( 'post_type', 'taxonomy', 'custom' );
+
+   public $db_fields = array( 'parent' =&gt; 'menu_item_parent', 'id' =&gt; 'db_id' );
+
+   public function start_lvl( &amp;$output, $depth = 0, $args = array() ) {
+      $indent = str_repeat("\t", $depth);
+      $output .= "\n$indent&lt;ul class=\"sub-menu\"&gt;\n";
+   }
+
+   public function end_lvl( &amp;$output, $depth = 0, $args = array() ) {
+      $indent = str_repeat("\t", $depth);
+      $output .= "$indent&lt;/ul&gt;\n";
+   }
+
+   public function start_el( &amp;$output, $item, $depth = 0, $args = array(), $id = 0 ) {
+      // code below
+   }
+
+   public function end_el( &amp;$output, $item, $depth = 0, $args = array() ) {
+      $output .= "&lt;/li&gt;\n";
+   }
+
+} // Walker_Nav_Menu
+</code></pre>
+            <p>Оператор <code>start_el</code>Открытый метод строит HTML разметку открытия <code>li</code>тег для каждого пункта меню.Она определяется следующим образом: </p>
+            <pre><code>public function start_el( &amp;$output, $item, $depth = 0, $args = array(), $id = 0 ) {
+   $indent = ( $depth ) ? str_repeat( "\t", $depth ) : '';
+
+   $classes = empty( $item-&gt;classes ) ? array() : (array) $item-&gt;classes;
+   $classes[] = 'menu-item-' . $item-&gt;ID;
+
+   $class_names = join( ' ', apply_filters( 'nav_menu_css_class', array_filter( $classes ), $item, $args, $depth ) );
+   $class_names = $class_names ? ' class="' . esc_attr( $class_names ) . '"' : '';
+
+   $id = apply_filters( 'nav_menu_item_id', 'menu-item-'. $item-&gt;ID, $item, $args, $depth );
+   $id = $id ? ' id="' . esc_attr( $id ) . '"' : '';
+
+   $output .= $indent . '&lt;li' . $id . $class_names .'&gt;';
+
+   $atts = array();
+   $atts['title']  = ! empty( $item-&gt;attr_title ) ? $item-&gt;attr_title : '';
+   $atts['target'] = ! empty( $item-&gt;target )     ? $item-&gt;target     : '';
+   $atts['rel']    = ! empty( $item-&gt;xfn )        ? $item-&gt;xfn        : '';
+   $atts['href']   = ! empty( $item-&gt;url )        ? $item-&gt;url        : '';
+
+   $atts = apply_filters( 'nav_menu_link_attributes', $atts, $item, $args, $depth );
+
+   $attributes = '';
+   foreach ( $atts as $attr =&gt; $value ) {
+      if ( ! empty( $value ) ) {
+         $value = ( 'href' === $attr ) ? esc_url( $value ) : esc_attr( $value );
+         $attributes .= ' ' . $attr . '="' . $value . '"';
+      }
+   }
+
+   $item_output = $args-&gt;before;
+   $item_output .= '&lt;a'. $attributes .'&gt;';
+
+   $item_output .= $args-&gt;link_before . apply_filters( 'the_title', $item-&gt;title, $item-&gt;ID ) . $args-&gt;link_after;
+   $item_output .= '&lt;/a&gt;';
+   $item_output .= $args-&gt;after;
+
+   $output .= apply_filters( 'walker_nav_menu_start_el', $item_output, $item, $depth, $args );
+}
+</code></pre>
+            <p>Код довольно очевидны: </p>
+            <ul>
+                <li><code>$indent</code>сохраняет ряд <code>'/t'</code>Строки, соответствующие <code>$depth</code>“Ы значение; </li>
+                <li><code>$classes</code>представляет собой массив из классов CSS, назначенных элемента списка; </li>
+                <li><code>$id</code>записывает element’с ID, состоящий из префикса <code>'menu-item-'</code>И элемента ID извлекаются из базы данных; </li>
+                <li><code>$atts</code>представляет собой массив из element’с атрибутами; </li>
+                <li><code>$item_output</code>отслеживает HTML код, прежде чем он присваивается <code>$output</code>; </li>
+                <li><code>$output</code>сохраняет HTML-разметки .</li>
+            </ul>
+            <h3>Расширение <code>Walker_Nav_Menu</code>Class</h3>
+            <p>При построении вашей собственную разметку меню навигации, вы можете решить, чтобы продлить <code>Walker</code>Сам или его конкретный класс ребенок класс <code>Walker_Nav_Menu</code>,Если вы решили продлить <code>Walker</code>класс, you’должны будете определить все необходимые свойства и методы.В противном случае, если вы решите расширить конкретный класс ребенка, you’буду просто нужно определить те методы вывода которого должен быть изменен .</p>
+            <p>Следующий пример описывает ситуацию в реальной жизни, в которой структура меню по умолчанию имеет быть изменены для того, чтобы интегрировать тему WordPress с рамках Фонда 5 .</p>
+            <figure><img src="/wp-content/uploads/2015/10/44089-03-foundationhomepage-opt.png" alt="Foundation 5 home page"><br>
+                <figcaption>Foundation 5′домашние страницы .</figcaption>
+            </figure>
+            <h3 id="a-working-example-the-foundation-top-bar-as-wordpress-navigation-menu">Рабочая Пример:Фонд Топ Бар Как WordPress меню навигации <a href="http://www.smashingmagazine.com/#a-working-example-the-foundation-top-bar-as-wordpress-navigation-menu" aria-label="Link to section 'A Working Example: The Foundation Top Bar As WordPress Navigation Menu'">Link</a></h3>
+            <p><a href="http://foundation.zurb.com/">Фонд 5</a><sup id="note-24"><a href="http://www.smashingmagazine.com/#24">24</a></sup>поставляется с гибкой системой сетки и с помощью плагинов и компонентов, которые делают его легко разрабатывать твердых и отзывчивые веб-сайтов.Так, есть вероятность, что you’будете решать, чтобы обогатить свою тему со всем этим большой материал .</p>
+            <p>Во-первых, вам нужно включить все необходимые скрипты и таблицы стилей в вашей теме.Это не наша тема, поэтому мы won’т погружение в глубь конфигурации, но вы можете вытащить всю необходимую информацию непосредственно от <a href="http://foundation.zurb.com/docs/javascript.html">Documentation</a><sup id="note-25"><a href="http://www.smashingmagazine.com/#25">25</a></sup>и <a href="https://codex.wordpress.org/Function_Reference/wp_enqueue_script">WordPress Codex</a><sup id="note-26"><a href="http://www.smashingmagazine.com/#26">26</a></sup>.</p>
+            <p>Здесь we’увидите, как заставить WordPress для отображения <a href="http://foundation.zurb.com/docs/components/topbar.html">Фонд Топ Bar</a><sup id="note-27"><a href="http://www.smashingmagazine.com/#27">27</a></sup>в качестве навигационного меню .</p>
+            <p>WordPress должны напечатать что-нибудь вроде следующего HTML: </p>
+            <pre><code>&lt;nav class="top-bar" data-topbar role="navigation"&gt;
+   &lt;ul class="title-area"&gt;
+   &lt;li class="name"&gt;
+      &lt;h1&gt;&lt;a href="#"&gt;My Site&lt;/a&gt;&lt;/h1&gt;
+   &lt;/li&gt;
+   &lt;!-- Remove the class "menu-icon" to get rid of menu icon. Take out "Menu" to just have icon alone --&gt;
+   &lt;li class="toggle-topbar menu-icon"&gt;&lt;a href="#"&gt;&lt;span&gt;Menu&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
+   &lt;/ul&gt;
+
+   &lt;div class="top-bar-section"&gt;
+      &lt;!-- Left Nav Section --&gt;
+      &lt;ul class="left"&gt;
+         &lt;li class="active"&gt;&lt;a href="#"&gt;Right Button Active&lt;/a&gt;&lt;/li&gt;
+         &lt;li class="has-dropdown"&gt;
+            &lt;a href="#"&gt;Left Button Dropdown&lt;/a&gt;
+            &lt;ul class="dropdown"&gt;
+               &lt;li&gt;&lt;a href="#"&gt;First link in dropdown&lt;/a&gt;&lt;/li&gt;
+               &lt;li class="active"&gt;&lt;a href="#"&gt;Active link in dropdown&lt;/a&gt;&lt;/li&gt;
+            &lt;/ul&gt;
+         &lt;/li&gt;
+      &lt;/ul&gt;
+   &lt;/div&gt;
+&lt;/nav&gt;
+</code></pre>
+            <p>Для достижения нашей цели, добавьте следующий код в ваш <code>header.php</code>подать в зависимости от того, или файл шаблона содержит меню навигации: </p>
+            <pre><code>&lt;nav class="top-bar" data-topbar role="navigation"&gt;
+   &lt;ul class="title-area"&gt;
+      &lt;li class="name"&gt;
+         &lt;h1&gt;&lt;a href="#"&gt;&lt;?php echo get_bloginfo(); ?&gt;&lt;/a&gt;&lt;/h1&gt;
+      &lt;/li&gt;
+      &lt;li class="toggle-topbar menu-icon"&gt;&lt;a href="#"&gt;&lt;span&gt;&lt;!--&lt;?php echo get_bloginfo(); ?&gt;--&gt;&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
+   &lt;/ul&gt;
+   &lt;?php wp_nav_menu( array(
+      'theme_location'     =&gt; 'primary',
+      'container_class'    =&gt; 'top-bar-section',
+      'menu_class'         =&gt; 'left',
+      'walker'             =&gt; new Custom_Foundation_Nav_Menu()) ); ?&gt;
+&lt;/nav&gt;
+</code></pre>
+            <p>Мы поставили класс CSS Foundation <code>top-bar-section</code>Наряду с обычаем <code>Walker</code>класс, на навигационном меню контейнерного, расположение и выравнивание.Теперь мы можем определить <code>Custom_Foundation_Nav_Menu</code>: </p>
+            <pre><code>class Custom_Foundation_Nav_Menu extends Walker_Nav_Menu {
+   public function start_lvl( &amp;$output, $depth = 0, $args = array() ) {
+      $indent = str_repeat("\t", $depth);
+      
+      // add the dropdown CSS class
+      $output .= "\n$indent&lt;ul class=\"sub-menu dropdown\"&gt;\n";
+   }
+   public function display_element( $element, &amp;$children_elements, $max_depth, $depth = 0, $args, &amp;$output ) {
+      
+      // add 'not-click' class to the list item
+      $element-&gt;classes[] = 'not-click';
+
+      // if element is current or is an ancestor of the current element, add 'active' class to the list item
+      $element-&gt;classes[] = ( $element-&gt;current || $element-&gt;current_item_ancestor ) ? 'active' : '';
+
+      // if it is a root element and the menu is not flat, add 'has-dropdown' class 
+      // from https://core.trac.wordpress.org/browser/trunk/src/wp-includes/class-wp-walker.php#L140
+      $element-&gt;has_children = ! empty( $children_elements[ $element-&gt;ID ] );
+      $element-&gt;classes[] = ( $element-&gt;has_children &amp;&amp; 1 !== $max_depth ) ? 'has-dropdown' : '';
+
+      // call parent method
+      parent::display_element( $element, $children_elements, $max_depth, $depth, $args, $output );
+   }
+}
+</code></pre>
+            <p>Как вы можете видеть, we’ве пересмотрел <code>start_lvl</code>и <code>display_element</code>методы.Первый генерирует разметку открытия <code>ul</code>бирка и присваивает <code>dropdown</code>Класс CSS .</p>
+            <p>Второй метод, <code>display_element</code>Является <a href="https://core.trac.wordpress.org/browser/trunk/src/wp-includes/class-wp-walker.php#L112">описано в Trac</a><sup id="note-28"><a href="http://www.smashingmagazine.com/#28">28</a></sup>: Это метод “обхода элементов, чтобы создать список из элементов,” так что это хорошее место, чтобы внести изменения в меню .</p>
+            <p>Вот we’ве обращении к этому <code>has_children</code><code>classes</code><code>current</code>и <code>current_item_ancestor</code>свойства и принят обновленный <code>$element object</code>родителю <code>display_element</code>способ.That’S достаточно, чтобы достичь нашей цели, но мы могли бы сделать гораздо больше, от пунктов меню.Если вы позвоните <code>var_dump</code>на <code>$element</code>Объект, you’увидите все доступные свойства в вашем распоряжении, чтобы построить более продвинутые навигационные меню .</p>
+            <p>И, как we’увидите в момент, мы можем добавить новые свойства к объекту .</p>
+            <figure><img src="/wp-content/uploads/2015/10/44089-04-foundationmenu-opt.png" alt="The Foundation Top Bar on a WordPress website"><br>
+                <figcaption>Фонд Топ Бар на WordPress сайте .</figcaption>
+            </figure>
+            <p>Меню и работает, но мы хотим глубже настройки.В следующем примере, we’будете получать больше от нашего меню навигации, позволяя администратору сайта предварять значки названий пунктов, легкий способ: непосредственно с панели управления.В нашем примере, we’будем использовать <a href="http://zurb.com/playground/foundation-icon-fonts-3">Фонд Иконка шрифты 3</a><sup id="note-29"><a href="http://www.smashingmagazine.com/#29">29</a></sup>.</p>
+            <h3 id="adding-fields-to-the-wordpress-menu-items-editing-box">Добавление поля в WordPress Пункты меню “Редактирование Box <a href="http://www.smashingmagazine.com/#adding-fields-to-the-wordpress-menu-items-editing-box" aria-label="Link to section 'Adding Fields To The WordPress Menu Items’ Editing Box'">Link</a></h3>
+            <p>Прежде чем мы начнем кодирования, let’Откроем страницу редактирования меню и убедитесь, что все вкладки дополнительных свойств меню в меню “Options” экрана проверяются .</p>
+            <figure><img src="/wp-content/uploads/2015/10/44089-05-screenoptions-opt-small.png" alt="Screen Options Tab"><br>
+                <figcaption>Вкладку на странице администрирования для меню .__ 2 WordPress “” Параметры экрана “|</figcaption></figure>
+            <p>Каждый чекбокс разрешает или запрещает определенные поля в окне редактирования пункта меню: </p>
+            <figure><img src="/wp-content/uploads/2015/10/44089-06-menueditbox-opt.png" alt="Menu item edit box"><br>
+                <figcaption>Поле редактирования пунктов меню “.</figcaption>
+            </figure>
+            <p>Но мы можем сделать больше, чем добавить или изменить значения полей.Пункты меню были рассмотрены конкретные виды сообщения, а значения полей пунктов меню “хранятся в базе данных как скрытые пользовательские поля.Таким образом, мы можем добавить поле новый пункт меню в точности, как мы делаем с настраиваемые поля регулярного “.</p>
+            <p>Любой вид поля формы допускается: входы, флажки, текстовые и т.д. .</p>
+            <p>В следующем примере я покажу вам, как добавить простое текстовое поле, что позволяет администратору сайта добавить новое свойство к <code>$item</code>объект.Она будет храниться в качестве пользовательского поля и будет использоваться для отображения данных в передней части веб-сайта .</p>
+            <p>Чтобы сделать это, мы будем: </p>
+            <ol>
+                <li>зарегистрировать пользовательское поле для элемента меню навигации, </li>
+                <li>сохранить значение нового настраиваемого поля, в </li>
+                <li>настроить новый <code>Walker</code>класс для дерева меню редактирования .</li>
+            </ol>
+            <h4 id="step-1-register-a-custom-field-for-the-nav-menu-item">Шаг 1: Регистрация пользовательскую поле для Nav Пункт меню <a href="http://www.smashingmagazine.com/#step-1-register-a-custom-field-for-the-nav-menu-item" aria-label="Link to section 'Step 1: Register A Custom Field For The Nav Menu Item'">Link</a></h4>
+            <p>Во-первых, we’придется регистрировать новый пользовательский поле для пункта меню навигации в <code>functions.php</code>файл: </p>
+            <pre><code>/**
+ * Add a property to a menu item
+ *
+ * @param object $item The menu item object.
+ */
+function custom_nav_menu_item( $item ) {
+   $item-&gt;icon = get_post_meta( $item-&gt;ID, '_menu_item_icon', true );
+   return $item;
+}
+add_filter( 'wp_setup_nav_menu_item', 'custom_nav_menu_item' );
+</code></pre>
+            <p><code>wp_setup_nav_menu_item</code>фильтры меню навигации в <code>$item</code>объект, что позволяетнам добавить <code>icon</code>недвижимость .</p>
+            <h4 id="step-2-save-the-users-input">Шаг 2: Сохранить введенные пользователем <a href="http://www.smashingmagazine.com/#step-2-save-the-users-input" aria-label="Link to section 'Step 2: Save The User’s Input'">Link</a></h4>
+            <p>Когда пользователь отправляет форму со страницы администрирования параметра меню, следующий обратного вызова будет хранить fields’значения в базе данных: </p>
+            <pre><code>/**
+ * Save menu item custom fields' values
+ * 
+ * @link https://codex.wordpress.org/Function_Reference/sanitize_html_class
+ */
+function custom_update_nav_menu_item( $menu_id, $menu_item_db_id, $menu_item_args ){
+   if ( is_array( $_POST['menu-item-icon'] ) ) {
+      $menu_item_args['menu-item-icon'] = $_POST['menu-item-icon'][$menu_item_db_id];
+      update_post_meta( $menu_item_db_id, '_menu_item_icon', sanitize_html_class( $menu_item_args['menu-item-icon'] ) );
+   }
+}
+add_action( 'wp_update_nav_menu_item', 'custom_update_nav_menu_item', 10, 3 );
+</code></pre>
+            <p>При обновлении пункты меню, это действие вызывает <code>custom_update_nav_menu_item()</code>, Который будет дезинфицировать и обновить значение из <code>_menu_item_icon</code>Мета поле .</p>
+            <p>Теперь у нас есть, чтобы напечатать пользовательские field’с разметки .</p>
+            <h4 id="step-3-set-up-a-new-walker-for-the-edit-menu-tree">Шаг 3: Настройка нового Уолкер Для редактирования меню Tree <a href="http://www.smashingmagazine.com/#step-3-set-up-a-new-walker-for-the-edit-menu-tree" aria-label="Link to section 'Step 3: Set Up A New Walker For The Edit Menu Tree'">Link</a></h4>
+            <p>Структура странице администрирования параметра меню строится по <code>Walker_Nav_Menu_Edit</code>класс, который является расширением <code>Walker_Nav_Menu</code>,Чтобы настроить редактирования ящики пунктов меню “, we’буду нужен новый обычай <code>Walker_Nav_Menu</code>Ребенок класс основан на <code>Walker_Nav_Menu_Edit</code>класс .</p>
+            <p>Чтобы установить обычай <code>Walker</code>, На этот раз we’должны будете следующий фильтр: </p>
+            <pre><code>add_filter( 'wp_edit_nav_menu_walker', function( $class ){ return 'Custom_Walker_Nav_Menu_Edit'; } );</code></pre>
+            <p>При выстреле, этот фильтр выполняет <a href="http://php.net/manual/en/functions.anonymous.php">Анонимный function</a><sup id="note-30"><a href="http://www.smashingmagazine.com/#30">30</a></sup>который устанавливает пользовательский класс, который будет строить список пунктов меню .</p>
+            <p>Наконец, новый <code>Walker</code>может быть объявлен.Мы won’т воспроизводить полный код здесь.Просто скопируйте и вставьте полный <code>Walker_Nav_Menu_Edit</code>Код <a href="https://core.trac.wordpress.org/browser/tags/4.2.4/src/wp-admin/includes/nav-menu.php">от Trac</a><sup id="note-31"><a href="http://www.smashingmagazine.com/#31">31</a></sup>в пользовательском классе, и добавить пользовательские поля разметку, как показано ниже: </p>
+            <pre><code>class Custom_Walker_Nav_Menu_Edit extends Walker_Nav_Menu {
+   public function start_lvl( &amp;$output, $depth = 0, $args = array() ) {}
+   public function end_lvl( &amp;$output, $depth = 0, $args = array() ) {}
+   public function start_el( &amp;$output, $item, $depth = 0, $args = array(), $id = 0 ) {
+   ...
+   
+      &lt;p class="field-xfn description description-thin"&gt;
+         &lt;label for="edit-menu-item-xfn-&lt;?php echo $item_id; ?&gt;"&gt;
+            &lt;?php _e( 'Link Relationship (XFN)' ); ?&gt;&lt;br /&gt;
+            &lt;input type="text" id="edit-menu-item-xfn-&lt;?php echo $item_id; ?&gt;" class="widefat code edit-menu-item-xfn" name="menu-item-xfn[&lt;?php echo $item_id; ?&gt;]" value="&lt;?php echo esc_attr( $item-&gt;xfn ); ?&gt;" /&gt;
+         &lt;/label&gt;
+      &lt;/p&gt;
+      &lt;p class="field-custom description description-thin"&gt;
+         &lt;label for="edit-menu-item-icon-&lt;?php echo $item_id; ?&gt;"&gt;
+            &lt;?php _e( 'Foundation Icon' ); ?&gt;&lt;br /&gt;
+            &lt;input type="text" id="edit-menu-item-icon-&lt;?php echo $item_id; ?&gt;" class="widefat code edit-menu-item-icon" name="menu-item-icon[&lt;?php echo $item_id; ?&gt;]" value="&lt;?php echo esc_attr( $item-&gt;icon ); ?&gt;" /&gt;
+         &lt;/label&gt;
+      &lt;/p&gt;
+   ...
+   }
+}
+</code></pre>
+            <p>Теперь, с новым полем ввода на месте, администратор сайта сможет добавить новое свойство значок в меню <code>$item</code>объект .</p>
+            <figure><img src="/wp-content/uploads/2015/10/44089-07-menueditboxcustom-opt.png" alt="Custom menu item edit box"><br>
+                <figcaption>Настроенная версия редактирования поле Пункты меню “.</figcaption>
+            </figure>
+            <p>В это время, <code>Walker_Nav_Menu</code>класс won’т быть в состоянии получить доступ к новым стоимости недвижимости;Таким образом, значение <code>$item-&gt;icon</code>не будут доступны, чтобы построить структуру меню.Чтобы сделать это доступным, в <code>Custom_Foundation_Nav_Menu</code>класс нашем предыдущем примере, мы будем переопределить <code>start_el</code>способ.Самый простой способ, чтобы продолжить это скопировать код из <a href="https://core.trac.wordpress.org/browser/trunk/src/wp-includes/nav-menu-template.php"><code>Walker_Nav_Menu</code>class</a><sup id="note-32"><a href="http://www.smashingmagazine.com/#32">32</a></sup>и вставьте его в нашей пользовательского класса, его редактирование, при необходимости .</p>
+            <p>Так, вставьте код и перейти к нижней части новый <code>start_el</code>Способ и сделать следующеередактирует: </p>
+            <pre><code>public function start_el( &amp;$output, $item, $depth = 0, $args = array(), $id = 0 ) {
+
+   ...
+
+   $item_output = $args-&gt;before;
+   $item_output .= '&lt;a'. $attributes .'&gt;';
+
+   if( !empty( $item-&gt;icon ) )
+      $item_output .= '&lt;i class="fi-' . $item-&gt;icon . '" style="margin-right: .4em"&gt;&lt;/i&gt;';
+
+   $item_output .= $args-&gt;link_before . apply_filters( 'the_title', $item-&gt;title, $item-&gt;ID ) . $args-&gt;link_after;
+   $item_output .= '&lt;/a&gt;';
+   $item_output .= $args-&gt;after;
+
+   $output .= apply_filters( 'walker_nav_menu_start_el', $item_output, $item, $depth, $args );
+}
+</code></pre>
+            <p>Никаких других изменений не делается здесь, кроме условии, что проверяет значение из <code>$item-&gt;icon</code>имущество.Если значение было установлено, новая <code>i</code>элемент прикреплен к <code>$item_output</code>и назначен на соответствующую CSS класса .</p>
+            <p>Наконец, такая разметка показывает новую структуру меню HTML .</p>
+            <pre><code>&lt;div class="top-bar-section"&gt;
+   &lt;ul id="menu-nav-menu" class="left"&gt;
+      &lt;li id="menu-item-46" class="menu-item menu-item-type-custom menu-item-object-custom current-menu-item current_page_item menu-item-home not-click active menu-item-46"&gt;
+         &lt;a href="http://localhost:8888/wordpress/"&gt;
+            &lt;i class="fi-social-smashing-mag"&gt;&lt;/i&gt;
+            &lt;span&gt;Home&lt;/span&gt;
+         &lt;/a&gt;
+      &lt;/li&gt;
+   &lt;/ul&gt;
+&lt;/div&gt;
+</code></pre>
+            <p>На рисунке ниже показан конечный результат на рабочем столе .</p>
+            <figure><img src="/wp-content/uploads/2015/10/44089-08-icontopbardesktopzoomed-opt.png" alt="Foundation 5 Topbar in WordPress"><br>
+                <figcaption>Обычай Фонд 5 Топ-бар интегрированы в теме WordPress, обогащенный значок шрифтов из Фонда Icon Font 3 .</figcaption>
+            </figure>
+            <h3 id="final-notes">Заключительные Замечания <a href="http://www.smashingmagazine.com/#final-notes" aria-label="Link to section 'Final Notes'">Link</a></h3>
+            <p>В этой статье, we’ве исследовал некоторые из наиболее распространенных видов использования <code>Walker</code>класс.Заметим, однако, что наши примеры не охватывают все возможные приложения и альтернативные пути, чтобы воспользоваться класса.Но you’LL узнать больше, просто делает использование вашего воображения и ваших навыков в качестве программиста .</p>
+            <p>И никогда не упускать из виду официальной документации: </p>
+            <ul>
+                <li><a href="https://codex.wordpress.org/Class_Reference/Walker">Класс Ссылка / <code>Walker</code></a><sup id="note-33"><a href="http://www.smashingmagazine.com/#33">33</a></sup></li>
+                <li><a href="https://codex.wordpress.org/Function_Reference/wp_nav_menu">Справочник по функциям / <code>wp_nav_menu</code></a><sup id="note-34"><a href="http://www.smashingmagazine.com/#34">34</a></sup></li>
+            </ul>
+            <p><em property="editor">(мл, дп, JB, и др, JB) </em></p>
+            <h4 id="footnotes">Примечания <a href="http://www.smashingmagazine.com/#footnotes" aria-label="Link to section 'Footnotes'">Link</a></h4>
+            <ol>
+                <li id="#1"><a href="http://www.smashingmagazine.com/#note-1">1 HTTPS: //core.trac.wordpress.org/browser/trunk/src/wp-includes/class-wp-walker.php</a></li>
+                <li id="#2"><a href="http://www.smashingmagazine.com/#note-2">2 HTTPS: //codex.wordpress.org/Class_Reference/Walker_Page</a></li>
+                <li id="#3"><a href="http://www.smashingmagazine.com/#note-3">3 https://en.wikipedia.org/wiki/Tree_ (data_structure) </a></li>
+                <li id="#4"><a href="http://www.smashingmagazine.com/#note-4">4 HTTP: //www.smashingmagazine.com/wp-content/uploads/2015/09/01-wpcommentsstructure-opt.png</a></li>
+                <li id="#5"><a href="http://www.smashingmagazine.com/#note-5">5 HTTP: //www.smashingmagazine.com/wp-content/uploads/2015/09/01-wpcommentsstructure-opt.png</a></li>
+                <li id="#6"><a href="http://www.smashingmagazine.com/#note-6">6 HTTP: //php.net/manual/en/language.oop5.basic.php</a></li>
+                <li id="#7"><a href="http://www.smashingmagazine.com/#note-7">7 HTTPS: //codex.wordpress.org/Class_Reference/Walker</a></li>
+                <li id="#8"><a href="http://www.smashingmagazine.com/#note-8">8 HTTPS: //core.trac.wordpress.org/browser/trunk/src/wp-includes/class-wp-walker.php</a></li>
+                <li id="#9"><a href="http://www.smashingmagazine.com/#note-9">9HTTP: //php.net/manual/en/language.oop5.abstract.php</a></li>
+                <li id="#10"><a href="http://www.smashingmagazine.com/#note-10">10 HTTPS: //core.trac.wordpress.org/browser/trunk/src/wp-includes/post-template.php#L1325</a></li>
+                <li id="#11"><a href="http://www.smashingmagazine.com/#note-11">11 HTTPS: //core.trac.wordpress.org/browser/trunk/src/wp-includes/post-template.php#L1471</a></li>
+                <li id="#12"><a href="http://www.smashingmagazine.com/#note-12">12 HTTPS: //core.trac.wordpress.org/browser/trunk/src/wp-includes/category-template.php#L962</a></li>
+                <li id="#13"><a href="http://www.smashingmagazine.com/#note-13">13 HTTPS: //core.trac.wordpress.org/browser/trunk/src/wp-includes/category-template.php#L1163</a></li>
+                <li id="#14"><a href="http://www.smashingmagazine.com/#note-14">14 HTTPS: //core.trac.wordpress.org/browser/tags/4.2.2/src/wp-admin/includes/template.php#L24</a></li>
+                <li id="#15"><a href="http://www.smashingmagazine.com/#note-15">15 //core.trac.wordpress.org/browser/tags/4.2.2/src/wp-includes/comment-template.php#L1662</a></li>
+                <li id="#16"><a href="http://www.smashingmagazine.com/#note-16">16 HTTPS: //core.trac.wordpress.org/browser/trunk/src/wp-includes/nav-menu-template.php#L16</a></li>
+                <li id="#17"><a href="http://www.smashingmagazine.com/#note-17">17 HTTPS: //core.trac.wordpress.org/browser/tags/4.2.2/src/wp-admin/includes/nav-menu.php#L237</a></li>
+                <li id="#18"><a href="http://www.smashingmagazine.com/#note-18">18 HTTPS: //core.trac.wordpress.org/browser/tags/4.2.2/src/wp-admin/includes/nav-menu.php#L10</a></li>
+                <li id="#19"><a href="http://www.smashingmagazine.com/#note-19">19 HTTPS: //core.trac.wordpress.org/browser/trunk/src/wp-includes/class-wp-walker.php</a></li>
+                <li id="#20"><a href="http://www.smashingmagazine.com/#note-20">20 HTTPS: //core.trac.wordpress.org/browser/trunk/src/wp-includes/class-wp-walker.php#L112</a></li>
+                <li id="#21"><a href="http://www.smashingmagazine.com/#note-21">21 HTTPS: //core.trac.wordpress.org/browser/trunk/src/wp-includes/class-wp-walker.php#L175</a></li>
+                <li id="#22"><a href="http://www.smashingmagazine.com/#note-22">22 HTTPS: //codex.wordpress.org/Function_Reference/wp_nav_menu</a></li>
+                <li id="#23"><a href="http://www.smashingmagazine.com/#note-23">23 HTTPS: //core.trac.wordpress.org/browser/trunk/src/wp-includes/nav-menu-template.php</a></li>
+                <li id="#24"><a href="http://www.smashingmagazine.com/#note-24">24 HTTP: //foundation.zurb.com/</a></li>
+                <li id="#25"><a href="http://www.smashingmagazine.com/#note-25">25 HTTP: //foundation.zurb.com/docs/javascript.html</a></li>
+                <li id="#26"><a href="http://www.smashingmagazine.com/#note-26">26 HTTPS: //codex.wordpress.org/Function_Reference/wp_enqueue_script</a></li>
+                <li id="#27"><a href="http://www.smashingmagazine.com/#note-27">27 HTTP: //foundation.zurb.com/docs/components/topbar.html</a></li>
+                <li id="#28"><a href="http://www.smashingmagazine.com/#note-28">28 HTTPS: //core.trac.wordpress.org/browser/trunk/src/wp-includes/class-wp-walker.php#L112</a></li>
+                <li id="#29"><a href="http://www.smashingmagazine.com/#note-29">29 HTTP: //zurb.com/playground/foundation-icon-fonts-3</a></li>
+                <li id="#30"><a href="http://www.smashingmagazine.com/#note-30">30 HTTP: //php.net/manual/en/functions.anonymous.php</a></li>
+                <li id="#31"><a href="http://www.smashingmagazine.com/#note-31">31 HTTPS: //core.trac.wordpress.org/browser/tags/4.2.4/src/wp-admin/includes/nav-menu.php</a></li>
+                <li id="#32"><a href="http://www.smashingmagazine.com/#note-32">32 HTTPS: //core.trac.wordpress.org/browser/trunk/src/wp-includes/nav-menu-template.php</a></li>
+                <li id="#33"><a href="http://www.smashingmagazine.com/#note-33">33 HTTPS: //codex.wordpress.org/Class_Reference/Walker</a></li>
+                <li id="#34"><a href="http://www.smashingmagazine.com/#note-34">34 HTTPS: //codex.wordpress.org/Function_Reference/wp_nav_menu</a></li>
+            </ol>
+            <p><span id="origlngsrc"></span><br>
+
+            </p><div class="news_sourc">
+                <p>Источник:<a href="http://www.smashingmagazine.com/2015/10/customize-tree-like-data-structures-wordpress-walker-class/"><em>http://www.smashingmagazine.com/2015/10/customize-tree-like-data-structures-wordpress-walker-class/</em></a></p>
+            </div>
+            <div class="addthis_toolbox addthis_default_style " addthis:url="http://bot.kz/2015/10/44089" addthis:title="Настройка Структуры древовидных данных в WordPress с The Walker класса "><a class="addthis_button_facebook_like at300b" fb:like:layout="button_count"><div class="fb-like fb_iframe_widget" data-layout="button_count" data-show_faces="false" data-share="false" data-action="like" data-width="90" data-height="25" data-font="arial" data-href="http://bot.kz/2015/10/44089" data-send="false" style="height: 25px;" fb-xfbml-state="rendered" fb-iframe-plugin-query="action=like&amp;app_id=172525162793917&amp;container_width=0&amp;font=arial&amp;height=25&amp;href=http%3A%2F%2Fbot.kz%2F2015%2F10%2F44089&amp;layout=button_count&amp;locale=en_US&amp;sdk=joey&amp;send=false&amp;share=false&amp;show_faces=false&amp;width=90"><span style="vertical-align: bottom; width: 70px; height: 20px;"><iframe name="f3d9db05bb9e108" width="90px" height="25px" title="fb:like Facebook Social Plugin" frameborder="0" allowtransparency="true" allowfullscreen="true" scrolling="no" allow="encrypted-media" src="https://www.facebook.com/v2.6/plugins/like.php?action=like&amp;app_id=172525162793917&amp;channel=https%3A%2F%2Fstaticxx.facebook.com%2Fconnect%2Fxd_arbiter.php%3Fversion%3D44%23cb%3Df2eb12202483614%26domain%3Dbot.kz%26origin%3Dhttp%253A%252F%252Fbot.kz%252Ff1316641edbb964%26relation%3Dparent.parent&amp;container_width=0&amp;font=arial&amp;height=25&amp;href=http%3A%2F%2Fbot.kz%2F2015%2F10%2F44089&amp;layout=button_count&amp;locale=en_US&amp;sdk=joey&amp;send=false&amp;share=false&amp;show_faces=false&amp;width=90" style="border: none; visibility: visible; width: 70px; height: 20px;" class=""></iframe></span></div></a><a class="addthis_button_tweet at300b"><div class="tweet_iframe_widget" style="width: 62px; height: 25px;"><span><iframe id="twitter-widget-1" scrolling="no" frameborder="0" allowtransparency="true" class="twitter-share-button twitter-share-button-rendered twitter-tweet-button" style="position: static; visibility: visible; width: 80px; height: 20px;" title="Twitter Tweet Button" src="https://platform.twitter.com/widgets/tweet_button.2d991e3dfc9abb2549972ce8b64c5d85.ru.html#dnt=false&amp;id=twitter-widget-1&amp;lang=ru&amp;original_referer=http%3A%2F%2Fbot.kz%2F2015%2F10%2F44089%3Fh%3D5c34dee96f37b55e65b2256159ab47b1&amp;size=m&amp;text=%D0%9D%D0%B0%D1%81%D1%82%D1%80%D0%BE%D0%B9%D0%BA%D0%B0%20%D0%A1%D1%82%D1%80%D1%83%D0%BA%D1%82%D1%83%D1%80%D1%8B%20%D0%B4%D1%80%D0%B5%D0%B2%D0%BE%D0%B2%D0%B8%D0%B4%D0%BD%D1%8B%D1%85%20%D0%B4%D0%B0%D0%BD%D0%BD%D1%8B%D1%85%20%D0%B2%20WordPress%20%D1%81%20The%20Walker%20%D0%BA%D0%BB%D0%B0%D1%81%D1%81%D0%B0%20&amp;time=1573213329752&amp;type=share&amp;url=http%3A%2F%2Fbot.kz%2F2015%2F10%2F44089" data-url="http://bot.kz/2015/10/44089"></iframe></span></div></a><a class="addthis_button_google_plusone" g:plusone:size="medium"></a><a class="addthis_counter addthis_pill_style" href="#" style="display: inline-block;"><a class="atc_s addthis_button_compact">Поделиться<span></span></a><a class="addthis_button_expanded" target="_blank" title="Еще..." href="#"></a></a><div class="atclear"></div></div> 		
+            <!-- ����� ������ --------------------------------------------------------------------->		
+
+            <!-- My -->
+            <div class="entry-meta">
+                <a href="http://bot.kz/" title="Главная" rel="bookmark"> Главная </a> <span class="sep"> → </span> <a href="http://bot.kz/category/wp" title="Просмотреть все записи в рубрике «Wordpress»" rel="category tag">Wordpress</a> <span class="sep"> → </span><a href="http://bot.kz/2015/10/44089" title="18:00" rel="bookmark"><time class="entry-date" datetime="2015-10-14T18:00:05+00:00" pubdate="">14.10.2015</time></a><span class="by-author"> <span class="sep"> by </span> <span class="author vcard"><a class="url fn n" href="http://bot.kz/author/wp_smashingmagazine_com" title="Посмотреть все записи автора wp.smashingmagazine.com" rel="author">wp.smashingmagazine.com</a></span></span>		</div><!-- .entry-meta -->
+
+
+        </div>
+    </body>
+</html>
