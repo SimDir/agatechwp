@@ -71,7 +71,7 @@ ul {
    visibility: hidden;
    width: 100vw;
    min-height: 4rem;
-   background-color: rgba(153,153,153, .6);
+   background-color: rgba(83,92,112,.75);
    display: flex;
    align-items: flex-start;
    justify-content: space-between;
