@@ -1,0 +1,334 @@
+*{
+   padding: 0;
+   margin: 0;
+   box-sizing: border-box;
+   /* font-family: 'Roboto Condensed', sans-serif; */
+   /* font-family: 'Open Sans Condensed', sans-serif; */
+   font-family: 'Ubuntu', sans-serif;
+}
+header {
+   width: 100vw;
+   background-color: transparent;
+   position: relative;
+   top: 0;
+}
+ul {
+   margin: 0;
+}
+.header {
+   height: 7rem;
+   width: 90%;
+   margin: 0 auto;
+   display: flex;
+   flex-direction: row;
+   flex-wrap: nowrap;
+   justify-content: space-between;
+}
+
+.header__logo {
+   flex-basis: 15%;
+   align-self: center;
+}
+.header__logo img{
+   width: 100%;
+   height: 100%;
+}
+
+
+.header__menu {
+   flex-basis: 60%;
+   height: 100%;
+   text-align: center;
+}
+.header__lang {
+   flex-basis: 5%;
+   display: flex;
+   justify-content: center;
+   
+}
+.header__lang a {
+   align-self: center;
+   text-decoration: none;
+   font-style: normal;
+   font-weight: bold;
+   font-size: 14px;
+   line-height: 24px;
+   color: #5F9FC7;
+}
+.header__menu nav {
+   height: 100%;
+   display: flex;
+   flex-wrap: nowrap;
+   justify-content: space-between;
+}
+.header__menu_link {
+   height: 100%;
+   display: flex;
+   align-items: center;
+}
+.header__menu_link_btn {
+   height: 100%;
+   padding: 2.7rem 5px;
+   text-decoration: none;
+   color: #fff;
+   cursor: pointer;
+   font-style: normal;
+   font-weight: bold;
+   font-size: 14px;
+   line-height: 14px;
+}
+.header__menu_link_btn:hover {
+   text-decoration: none;
+   color: #ffffff;
+}
+.header__menu_link:hover .header_bottom {
+   visibility: visible;
+   opacity: 1;
+}
+.header_bottom {
+   visibility: hidden;
+   width: 100vw;
+   min-height: 4rem;
+   background-color: rgba(83,92,112,.75);
+   display: flex;
+   align-items: flex-start;
+   justify-content: space-between;
+   position: absolute;
+   top: 100%;
+   left: 0;
+   transition: all .5s ease;
+   opacity: 0;
+}
+.header_bottom__content {
+   width: 90%;
+   margin: 0 auto;
+   display: flex;
+   justify-content: space-between;
+}
+.empty_block {
+   flex-basis: 20%;
+}
+/* .empty_block1 {
+   flex-basis: 5%;
+} */
+.header_bottom__content_menu {
+   flex-basis: 72%;  
+   display: flex;
+   flex-wrap: wrap;
+   flex-direction: row;
+   align-items: flex-start;
+   justify-content: flex-start;
+}
+.header_bottom__content_menu_link {
+   list-style-type: none;
+   padding: 1.5rem 1rem;
+   text-align: left;
+}
+.header_bottom__content_menu_link_btn_title{
+   text-decoration: none;
+   color: #fff;
+   font-size: .8rem;
+   
+}
+.header_bottom__content_menu_link_btn_title:hover {
+   color: #ffffff;
+}
+.header_bottom__content_menu_link ul {
+   text-align: left;
+   margin-top: .7rem;
+}
+.header_bottom__content_menu_link ul>li {
+   list-style-type: none;
+   
+}
+.header_bottom__content_menu_link ul>li>a{
+   text-decoration: none;
+   font-size: 0.7rem;
+   color: #e9e9e9;
+}
+
+
+
+
+
+.slider_block {
+   position: absolute;
+   top: 0; left: 0;
+   width: 100vw;
+   height: 100vh;
+   z-index: -1;
+   overflow: hidden;
+}
+.slide-1 img {
+   position: absolute;
+   top: 30%;
+   left: 30%;
+   z-index: 0.1;
+}
+
+.slide-2 {
+   background-color: #06093C;
+   height: 100vh;
+   width: 100vw;
+   padding-top: 8rem;
+}
+.slide-2_flex {
+   width: 85%;
+   margin: 0 auto;
+   display: flex;
+   justify-content: space-between;
+}
+.slide-2__content {
+  width: 375px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: flex-start;
+  margin: 0 30px;
+}
+.slide-2__content_top {
+   align-self: center;
+}
+.circle {
+   width: 325px;
+   height: 325px;
+   
+}
+/* .slide-2__content_top:hover .circle_text1:after{
+   transition: all .5s ease;
+   font-size: 20px;
+}
+.slide-2__content_top:hover .circle_text2:after{
+   transition: all .5s ease;
+   font-size: 20px;
+}
+.slide-2__content_top:hover .circle_text3:after{
+   transition: all .5s ease;
+   font-size: 20px;
+} */
+.slide-2__content_top:hover .circle {
+   transition: all .5s ease;
+  transform: rotate(15deg);
+}
+
+.circle_text1, .circle_text2, .circle_text3 {
+   position: relative;
+   text-align: center;
+   display: block;
+}
+.circle_text1:after{
+   content: "agatech digital agency";
+   position: absolute;
+   width: 40%;
+   margin: 0 auto;
+   top: 40%;
+   left: 30%;
+   color: #fff;
+   text-transform: uppercase;
+   font-size: 18px;
+   font-weight: bold;
+   line-height: 20px;
+}
+.circle_text2:after{
+   content: "agatech продвижение и сопровождение";
+   position: absolute;
+   width: 60%;
+   margin: 0 auto;
+   top: 40%;
+   left: 20%;
+   color: #fff;
+   text-transform: uppercase;
+   font-size: 18px;
+   font-weight: bold;
+   line-height: 20px;
+}
+.circle_text3:after{
+   content: "agatech crm (управление)";
+   position: absolute;
+   width: 50%;
+   margin: 0 auto;
+   top: 45%;
+   left: 20%;
+   color: #fff;
+   text-transform: uppercase;
+   font-size: 18px;
+   font-weight: bold;
+   line-height: 20px;
+}
+
+.slide-2__content_bottom {
+   display: flex;
+   flex-wrap: nowrap;
+   justify-content: space-between;
+   margin-top: 1rem;
+}
+.icons_block {
+   text-align: center;
+   width: 65px;
+   margin: 0 3px;
+   display: flex;
+   flex-direction: column;
+   justify-content: flex-start;
+   
+}
+.icons_block p {
+   margin-top: 5px;
+   color: #fff;
+   font-size: 9px;
+   line-height: 9px;
+}
+.icons {
+   border-radius: 5px;
+   width: 50px;
+   height: 50px;
+   margin: 0 auto;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   transition: all .3s ease;
+}
+.icons-circle-1 {
+   border: 2px solid #47A04B;
+}
+.icons-circle-2 {
+   border: 2px solid #7F12E3;
+}
+.icons-circle-3 {
+   border: 2px solid #2D6EAB;
+}
+.icons img {
+   width: 25px;
+   height: 25px;
+   
+}
+.icons:hover {
+   width: 52px;
+   height: 52px;
+   box-shadow: 1px 1px 5px #e1e1e1;
+}
+
+
+
+
+.sll, .slr {
+   width: 5%;
+}
+
+
+
+
+
+/* DIGITAL AGATECH */
+.active_menu {
+   border-bottom: 3px solid #fff;
+   height: 100%;
+   padding: 2.7rem 10px;
+   text-decoration: none;
+   color: #fff;
+   font-size: 1.2rem;
+   cursor: pointer;
+}
+.active_menu:hover .header_bottom {
+   visibility: visible;
+   opacity: 1;
+}
